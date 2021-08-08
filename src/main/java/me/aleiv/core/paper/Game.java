@@ -1,33 +1,61 @@
 package me.aleiv.core.paper;
 
 import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.command.CommandSender;
 
+import co.aikar.taskchain.TaskChain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import me.aleiv.core.paper.events.GameTickEvent;
+import net.md_5.bungee.api.ChatColor;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Game extends BukkitRunnable {
+public class Game{
     Core instance;
 
-    long gameTime = 0;
-    long startTime = 0;
+    int startCode = '\uE000';
+
 
     public Game(Core instance) {
         this.instance = instance;
-        this.startTime = System.currentTimeMillis();
 
     }
 
-    @Override
-    public void run() {
+    public void animation(CommandSender sender, int from, int to, int frames){
 
-        var new_time = (int) (Math.floor((System.currentTimeMillis() - startTime) / 1000.0));
+        var chain = Core.newChain();
+        var n = startCode;
+        var count = 0;
 
-        gameTime = new_time;
+        if(from < 0 || to < 0){
+            sender.sendMessage(ChatColor.RED + "Invalid format.");
+            return;
 
-        Bukkit.getPluginManager().callEvent(new GameTickEvent(new_time, true));
+        }else if(from != 0){
+            n += from;
+            count += from;
+
+        }
+        
+        while (count < to) {
+    
+            final var current = n;
+    
+            chain.delay(frames).sync(() -> {
+
+                var title = Character.toString(current);
+
+                Bukkit.getOnlinePlayers().forEach(p->{
+                    p.sendTitle(title, "", 0, 60, 1);
+                });
+
+            });
+
+            count++;
+            n++;
+
+        }
+    
+        chain.sync(TaskChain::abort).execute();
     }
 }

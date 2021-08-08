@@ -1,4 +1,4 @@
-name: CoreTemplate
+name: AnimationsCore
 version: ${version}
 main: me.aleiv.core.paper.Core
 api-version: 1.16
