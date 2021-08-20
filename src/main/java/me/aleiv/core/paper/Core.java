@@ -8,7 +8,6 @@ import co.aikar.taskchain.TaskChain;
 import co.aikar.taskchain.TaskChainFactory;
 import lombok.Getter;
 import lombok.Setter;
-import me.aleiv.core.paper.commands.GlobalCMD;
 
 public class Core extends JavaPlugin {
 
@@ -28,7 +27,7 @@ public class Core extends JavaPlugin {
         //COMMANDS
         
         commandManager = new PaperCommandManager(this);
-        commandManager.registerCommand(new GlobalCMD(this));
+        commandManager.registerCommand(new animationCMD(this));
 
     }
 
