@@ -1,7 +1,10 @@
 package me.aleiv.core.paper;
 
+import java.time.Duration;
 import java.util.List;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 
 import co.aikar.taskchain.TaskChain;
@@ -26,9 +29,11 @@ public class Game{
 
         animationList.forEach(charac ->{
             chain.delay(frames).sync(() -> {
-
                 Bukkit.getOnlinePlayers().forEach(p->{
-                    p.sendTitle(charac + "", "", 0, 20, 0);
+                    //Change sendTitle to showTitle because sendTitle is deprecated
+                    p.showTitle(Title.title(Component.text(charac+""),Component.empty(),
+                            Title.Times.times(Duration.ofSeconds(0),
+                                    Duration.ofSeconds(1),Duration.ofSeconds(0))));
                    
                 });
 
